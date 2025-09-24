@@ -1,0 +1,212 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Privilege Escalation Scanner{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <!-- Welcome Section -->
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">
+                    <i class="fas fa-tachometer-alt me-2"></i>
+                    Welcome, {{ user.username }}!
+                </h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-8">
+                        <p class="lead mb-3">Manage your privilege escalation scans and view results.</p>
+                        <a href="{{ url_for('scan') }}" class="btn btn-success btn-lg me-2">
+                            <i class="fas fa-search me-2"></i>Demo Scan
+                        </a>
+                        <a href="{{ url_for('realtime_scan') }}" class="btn btn-primary btn-lg">
+                            <i class="fas fa-radar me-2"></i>Real-Time Scan
+                        </a>
+                    </div>
+                    <div class="col-md-4 text-md-end">
+                        <div class="text-muted">
+                            <small>Member since: {{ user.created_at.strftime('%B %d, %Y') }}</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics Cards -->
+        <div class="row mb-4">
+            <div class="col-md-3 mb-3">
+                <div class="card bg-primary text-white">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h4 class="mb-0">{{ scan_results|length }}</h4>
+                                <p class="mb-0">Total Scans</p>
+                            </div>
+                            <div class="align-self-center">
+                                <i class="fas fa-search fa-2x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3 mb-3">
+                <div class="card bg-danger text-white">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h4 class="mb-0">
+                                    {{ scan_results|selectattr('results', 'defined')|selectattr('results.risk_level', 'equalto', 'high')|list|length }}
+                                </h4>
+                                <p class="mb-0">High Risk</p>
+                            </div>
+                            <div class="align-self-center">
+                                <i class="fas fa-exclamation-triangle fa-2x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3 mb-3">
+                <div class="card bg-warning text-white">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h4 class="mb-0">
+                                    {{ scan_results|selectattr('results', 'defined')|selectattr('results.risk_level', 'equalto', 'medium')|list|length }}
+                                </h4>
+                                <p class="mb-0">Medium Risk</p>
+                            </div>
+                            <div class="align-self-center">
+                                <i class="fas fa-exclamation-circle fa-2x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-3 mb-3">
+                <div class="card bg-success text-white">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h4 class="mb-0">
+                                    {{ scan_results|selectattr('results', 'defined')|selectattr('results.risk_level', 'equalto', 'low')|list|length }}
+                                </h4>
+                                <p class="mb-0">Low Risk</p>
+                            </div>
+                            <div class="align-self-center">
+                                <i class="fas fa-check-circle fa-2x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scan History -->
+        <div class="card">
+            <div class="card-header bg-light">
+                <h5 class="mb-0">
+                    <i class="fas fa-history me-2"></i>
+                    Scan History
+                </h5>
+            </div>
+            <div class="card-body">
+                {% if scan_results %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Scan ID</th>
+                                <th>Type</th>
+                                <th>Status</th>
+                                <th>Risk Level</th>
+                                <th>Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for scan in scan_results %}
+                            <tr>
+                                <td>
+                                    <code>#{{ scan.id }}</code>
+                                </td>
+                                <td>
+                                    <span class="badge bg-info">{{ scan.scan_type.replace('_', ' ').title() }}</span>
+                                </td>
+                                <td>
+                                    {% if scan.status == 'completed' %}
+                                        <span class="badge bg-success">
+                                            <i class="fas fa-check me-1"></i>Completed
+                                        </span>
+                                    {% elif scan.status == 'running' %}
+                                        <span class="badge bg-warning">
+                                            <i class="fas fa-spinner fa-spin me-1"></i>Running
+                                        </span>
+                                    {% else %}
+                                        <span class="badge bg-danger">
+                                            <i class="fas fa-times me-1"></i>Failed
+                                        </span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if scan.status == 'completed' and scan.results_json %}
+                                        {% set results = scan.get_results() %}
+                                        {% if results['risk_level'] == 'high' %}
+                                            <span class="badge bg-danger">High</span>
+                                        {% elif results['risk_level'] == 'medium' %}
+                                            <span class="badge bg-warning">Medium</span>
+                                        {% elif results['risk_level'] == 'low' %}
+                                            <span class="badge bg-success">Low</span>
+                                        {% elif results['risk_level'] == 'minimal' %}
+                                            <span class="badge bg-success">Minimal</span>
+                                        {% else %}
+                                            <span class="badge bg-secondary">Unknown</span>
+                                        {% endif %}
+                                    {% else %}
+                                        <span class="badge bg-secondary">-</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <small class="text-muted">
+                                        {{ scan.created_at.strftime('%Y-%m-%d %H:%M') }}
+                                    </small>
+                                </td>
+                                <td>
+                                    {% if scan.status == 'completed' %}
+                                        <a href="{{ url_for('view_results', scan_id=scan.id) }}" class="btn btn-sm btn-outline-primary">
+                                            <i class="fas fa-eye me-1"></i>View
+                                        </a>
+                                    {% else %}
+                                        <button class="btn btn-sm btn-outline-secondary" disabled>
+                                            <i class="fas fa-eye me-1"></i>View
+                                        </button>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="text-center py-5">
+                    <i class="fas fa-search fa-3x text-muted mb-3"></i>
+                    <h5 class="text-muted">No scans yet</h5>
+                    <p class="text-muted">Run your first privilege escalation scan to get started!</p>
+                    <a href="{{ url_for('scan') }}" class="btn btn-primary">
+                        <i class="fas fa-search me-2"></i>Run Scan
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+
+

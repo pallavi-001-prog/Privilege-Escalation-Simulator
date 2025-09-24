@@ -1,0 +1,233 @@
+{% extends "base.html" %}
+
+{% block title %}Real-Time Scan Results - Privilege Escalation Scanner{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <!-- Results Header -->
+        <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4 class="mb-0">
+                    <i class="fas fa-radar me-2"></i>
+                    Real-Time Scan Results - {{ scan_type.title() }}
+                </h4>
+                <div>
+                    <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary">
+                        <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+                    </a>
+                    <a href="{{ url_for('realtime_scan') }}" class="btn btn-primary">
+                        <i class="fas fa-radar me-2"></i>Run Another Scan
+                    </a>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="text-center">
+                            <h3 class="text-{{ 'danger' if results['risk_level'] == 'high' else 'warning' if results['risk_level'] == 'medium' else 'success' if results['risk_level'] == 'low' else 'secondary' }}">
+                                {{ results['risk_score'] }}%
+                            </h3>
+                            <p class="mb-0">Risk Score</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="text-center">
+                            <h3 class="text-{{ 'danger' if results['risk_level'] == 'high' else 'warning' if results['risk_level'] == 'medium' else 'success' if results['risk_level'] == 'low' else 'secondary' }}">
+                                {{ results['risk_level'].title() }}
+                            </h3>
+                            <p class="mb-0">Risk Level</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="text-center">
+                            <h3 class="text-primary">{{ results['summary']['total_checks'] }}</h3>
+                            <p class="mb-0">Total Checks</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="text-center">
+                            <h3 class="text-danger">{{ results['summary']['vulnerable'] }}</h3>
+                            <p class="mb-0">Vulnerabilities</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scan Information -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-info-circle me-2"></i>
+                    Scan Information
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>Scan Type:</strong> {{ scan_type.title() }} Scan</p>
+                        <p><strong>Timestamp:</strong> {{ results['scan_info']['timestamp'] }}</p>
+                        <p><strong>Platform:</strong> {{ results['scan_info']['platform'] }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Hostname:</strong> {{ results['scan_info']['hostname'] }}</p>
+                        <p><strong>User:</strong> {{ results['scan_info']['user'] }}</p>
+                        <p><strong>Status:</strong> <span class="badge bg-success">Completed</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Real-Time Vulnerability Checks -->
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-bug me-2"></i>
+                    Real-Time Vulnerability Checks
+                </h5>
+            </div>
+            <div class="card-body">
+                {% for check in results['checks'] %}
+                <div class="card mb-3">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h6 class="mb-0">{{ check.name }}</h6>
+                        <div>
+                            {% if check.status == 'vulnerable' %}
+                                <span class="badge bg-danger">
+                                    <i class="fas fa-exclamation-triangle me-1"></i>Vulnerable
+                                </span>
+                            {% elif check.status == 'warning' %}
+                                <span class="badge bg-warning text-dark">
+                                    <i class="fas fa-exclamation-circle me-1"></i>Warning
+                                </span>
+                            {% elif check.status == 'safe' %}
+                                <span class="badge bg-success">
+                                    <i class="fas fa-check-circle me-1"></i>Safe
+                                </span>
+                            {% else %}
+                                <span class="badge bg-info">
+                                    <i class="fas fa-info-circle me-1"></i>Info
+                                </span>
+                            {% endif %}
+                            
+                            <span class="badge bg-{{ 'danger' if check.risk_level == 'high' else 'warning' if check.risk_level == 'medium' else 'success' if check.risk_level == 'low' else 'secondary' }} ms-2">
+                                {{ check.risk_level.title() }} Risk
+                            </span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <p class="mb-2">{{ check.description }}</p>
+                        {% if check.details %}
+                        <div class="mt-3">
+                            <h6>Details:</h6>
+                            <ul class="mb-0">
+                                {% for detail in check.details %}
+                                <li><code>{{ detail }}</code></li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        {% endif %}
+                        
+                        <!-- Real-time recommendations -->
+                        {% if check.status == 'vulnerable' %}
+                        <div class="alert alert-danger mt-3">
+                            <h6><i class="fas fa-exclamation-triangle me-2"></i>Immediate Action Required</h6>
+                            <p class="mb-0">This vulnerability should be addressed immediately to secure your system.</p>
+                        </div>
+                        {% elif check.status == 'warning' %}
+                        <div class="alert alert-warning mt-3">
+                            <h6><i class="fas fa-exclamation-circle me-2"></i>Recommended Action</h6>
+                            <p class="mb-0">Consider addressing this issue to improve your system security.</p>
+                        </div>
+                        {% elif check.status == 'safe' %}
+                        <div class="alert alert-success mt-3">
+                            <h6><i class="fas fa-check-circle me-2"></i>Good Security</h6>
+                            <p class="mb-0">This aspect of your system appears to be properly configured.</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Summary Statistics -->
+        <div class="card mt-4">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-chart-pie me-2"></i>
+                    Summary Statistics
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3 text-center">
+                        <div class="bg-danger text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-2" style="width: 60px; height: 60px;">
+                            <i class="fas fa-exclamation-triangle fa-lg"></i>
+                        </div>
+                        <h4 class="text-danger">{{ results['summary']['vulnerable'] }}</h4>
+                        <p class="mb-0">Vulnerable</p>
+                    </div>
+                    <div class="col-md-3 text-center">
+                        <div class="bg-warning text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-2" style="width: 60px; height: 60px;">
+                            <i class="fas fa-exclamation-circle fa-lg"></i>
+                        </div>
+                        <h4 class="text-warning">{{ results['summary']['warnings'] }}</h4>
+                        <p class="mb-0">Warnings</p>
+                    </div>
+                    <div class="col-md-3 text-center">
+                        <div class="bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-2" style="width: 60px; height: 60px;">
+                            <i class="fas fa-check-circle fa-lg"></i>
+                        </div>
+                        <h4 class="text-success">{{ results['summary']['safe'] }}</h4>
+                        <p class="mb-0">Safe</p>
+                    </div>
+                    <div class="col-md-3 text-center">
+                        <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-2" style="width: 60px; height: 60px;">
+                            <i class="fas fa-list fa-lg"></i>
+                        </div>
+                        <h4 class="text-primary">{{ results['summary']['total_checks'] }}</h4>
+                        <p class="mb-0">Total</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Security Recommendations -->
+        <div class="card mt-4">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-lightbulb me-2"></i>
+                    Security Recommendations
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6>General Security Tips:</h6>
+                        <ul>
+                            <li>Keep your operating system updated</li>
+                            <li>Use strong, unique passwords</li>
+                            <li>Enable firewall protection</li>
+                            <li>Install reputable antivirus software</li>
+                            <li>Regularly backup important data</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h6>Network Security:</h6>
+                        <ul>
+                            <li>Close unnecessary network ports</li>
+                            <li>Use secure network protocols (HTTPS, SSH)</li>
+                            <li>Regularly update network devices</li>
+                            <li>Monitor network traffic</li>
+                            <li>Use VPN for sensitive connections</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

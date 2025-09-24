@@ -1,0 +1,214 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Privilege Escalation Scanner{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <!-- Hero Section -->
+        <div class="jumbotron bg-primary text-white rounded p-5 mb-5 matrix-bg">
+            <div class="text-center position-relative">
+                <h1 class="display-4 mb-4 cyber-text-glow">
+                    <i class="fas fa-shield-alt me-3"></i>
+                    <span class="terminal-text">Privilege Escalation Scanner</span>
+                </h1>
+                <p class="lead mb-4 terminal-text">
+                    Educational tool for learning about privilege escalation vulnerabilities and security best practices.
+                </p>
+                <div class="alert alert-warning d-inline-block cyber-border-glow" role="alert">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    <strong>Educational Purpose Only</strong> - This tool is designed for learning and demonstration purposes.
+                </div>
+                <div class="mt-4">
+                    <span class="terminal-text terminal-cursor">INITIALIZING SECURITY PROTOCOLS...</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Features Section -->
+        <div class="row mb-5">
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center">
+                        <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                            <i class="fas fa-search fa-lg"></i>
+                        </div>
+                        <h5 class="card-title">Vulnerability Scanning</h5>
+                        <p class="card-text">Comprehensive scanning for common privilege escalation vulnerabilities including SUID files, sudo misconfigurations, and file permissions.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center">
+                        <div class="bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                            <i class="fas fa-chart-line fa-lg"></i>
+                        </div>
+                        <h5 class="card-title">Risk Assessment</h5>
+                        <p class="card-text">Detailed risk scoring and categorization to help understand the severity of identified vulnerabilities.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center">
+                        <div class="bg-info text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                            <i class="fas fa-graduation-cap fa-lg"></i>
+                        </div>
+                        <h5 class="card-title">Educational Focus</h5>
+                        <p class="card-text">Learn about security concepts through hands-on experience with simulated vulnerability checks.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- What is Privilege Escalation Section -->
+        <div class="card mb-5">
+            <div class="card-header bg-light">
+                <h4 class="mb-0">
+                    <i class="fas fa-info-circle me-2"></i>
+                    What is Privilege Escalation?
+                </h4>
+            </div>
+            <div class="card-body">
+                <p class="lead">Privilege escalation is a security vulnerability that allows an attacker to gain elevated access to resources that are normally protected from an application or user.</p>
+                
+                <h5>Common Types:</h5>
+                <div class="row">
+                    <div class="col-md-6">
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-arrow-up text-danger me-2"></i><strong>Vertical Escalation:</strong> Gaining higher privileges</li>
+                            <li><i class="fas fa-arrow-right text-warning me-2"></i><strong>Horizontal Escalation:</strong> Gaining access to other users' resources</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-user-shield text-info me-2"></i><strong>Root Access:</strong> Gaining administrator privileges</li>
+                            <li><i class="fas fa-database text-primary me-2"></i><strong>System Access:</strong> Accessing system-level resources</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Common Vulnerabilities Section -->
+        <div class="card mb-5">
+            <div class="card-header bg-light">
+                <h4 class="mb-0">
+                    <i class="fas fa-bug me-2"></i>
+                    Common Privilege Escalation Vulnerabilities
+                </h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <div class="d-flex">
+                            <div class="flex-shrink-0">
+                                <div class="bg-danger text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                    <i class="fas fa-exclamation"></i>
+                                </div>
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <h6>SUID Files</h6>
+                                <p class="mb-0 small">Files with Set User ID bit that execute with owner's privileges.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                        <div class="d-flex">
+                            <div class="flex-shrink-0">
+                                <div class="bg-warning text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                    <i class="fas fa-key"></i>
+                                </div>
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <h6>Sudo Misconfigurations</h6>
+                                <p class="mb-0 small">Incorrect sudo configurations allowing unauthorized access.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                        <div class="d-flex">
+                            <div class="flex-shrink-0">
+                                <div class="bg-info text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                    <i class="fas fa-file"></i>
+                                </div>
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <h6>File Permissions</h6>
+                                <p class="mb-0 small">Incorrect file permissions on sensitive system files.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                        <div class="d-flex">
+                            <div class="flex-shrink-0">
+                                <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <h6>Cron Jobs</h6>
+                                <p class="mb-0 small">Exploitable scheduled tasks running with elevated privileges.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Getting Started Section -->
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h4 class="mb-0">
+                    <i class="fas fa-rocket me-2"></i>
+                    Getting Started
+                </h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-8">
+                        <h5>Ready to start learning?</h5>
+                        <p>Create an account and begin exploring privilege escalation vulnerabilities in a safe, educational environment.</p>
+                        <ol>
+                            <li>Register for a new account or log in</li>
+                            <li>Run a <strong>demo scan</strong> to learn about vulnerabilities</li>
+                            <li>Try our <strong>real-time scan</strong> to check your actual system</li>
+                            <li>Review the results and learn about security</li>
+                            <li>Explore the admin dashboard (if you have admin access)</li>
+                        </ol>
+                    </div>
+                    <div class="col-md-4 text-center">
+                        {% if not session.user_id %}
+                        <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-lg mb-2">
+                            <i class="fas fa-user-plus me-2"></i>Get Started
+                        </a>
+                        <br>
+                        <a href="{{ url_for('auth.login') }}" class="btn btn-outline-primary">
+                            <i class="fas fa-sign-in-alt me-2"></i>Login
+                        </a>
+                        {% else %}
+                        <a href="{{ url_for('scan') }}" class="btn btn-success btn-lg mb-2">
+                            <i class="fas fa-search me-2"></i>Run Scan
+                        </a>
+                        <br>
+                        <a href="{{ url_for('dashboard') }}" class="btn btn-outline-success">
+                            <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+
+

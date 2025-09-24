@@ -1,0 +1,172 @@
+{% extends "base.html" %}
+
+{% block title %}Real-Time Scan - Privilege Escalation Scanner{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h4 class="mb-0">
+                    <i class="fas fa-radar me-2"></i>
+                    Real-Time Vulnerability Scanner
+                </h4>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>
+                    <strong>Real-Time Scanning:</strong> This scanner checks your actual system for real vulnerabilities. Choose a scan type below.
+                </div>
+
+                <h5>Choose Scan Type:</h5>
+                <div class="row mb-4">
+                    <div class="col-md-3 mb-3">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <div class="card-body text-center">
+                                <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                                    <i class="fas fa-shield-alt fa-lg"></i>
+                                </div>
+                                <h6>Basic Scan</h6>
+                                <p class="small text-muted">Quick check of file permissions and running processes</p>
+                                <ul class="list-unstyled small text-start">
+                                    <li><i class="fas fa-check text-success me-1"></i>File permissions</li>
+                                    <li><i class="fas fa-check text-success me-1"></i>Running processes</li>
+                                    <li><i class="fas fa-check text-success me-1"></i>Sudo config</li>
+                                    <li><i class="fas fa-check text-success me-1"></i>SUID files</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3 mb-3">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <div class="card-body text-center">
+                                <div class="bg-warning text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                                    <i class="fas fa-network-wired fa-lg"></i>
+                                </div>
+                                <h6>Network Scan</h6>
+                                <p class="small text-muted">Check open ports and network services</p>
+                                <ul class="list-unstyled small text-start">
+                                    <li><i class="fas fa-check text-success me-1"></i>Open ports</li>
+                                    <li><i class="fas fa-check text-success me-1"></i>Network services</li>
+                                    <li><i class="fas fa-check text-success me-1"></i>Cron jobs</li>
+                                    <li><i class="fas fa-check text-success me-1"></i>Environment vars</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3 mb-3">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <div class="card-body text-center">
+                                <div class="bg-info text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                                    <i class="fas fa-cogs fa-lg"></i>
+                                </div>
+                                <h6>System Scan</h6>
+                                <p class="small text-muted">Comprehensive system and software check</p>
+                                <ul class="list-unstyled small text-start">
+                                    <li><i class="fas fa-check text-success me-1"></i>System info</li>
+                                    <li><i class="fas fa-check text-success me-1"></i>Installed software</li>
+                                    <li><i class="fas fa-check text-success me-1"></i>User groups</li>
+                                    <li><i class="fas fa-check text-success me-1"></i>World-writable files</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3 mb-3">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <div class="card-body text-center">
+                                <div class="bg-danger text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                                    <i class="fas fa-user-shield fa-lg"></i>
+                                </div>
+                                <h6>Privilege Escalation</h6>
+                                <p class="small text-muted">Comprehensive privilege escalation vulnerability scan</p>
+                                <ul class="list-unstyled small text-start">
+                                    <li><i class="fas fa-check text-success me-1"></i>Sudo config</li>
+                                    <li><i class="fas fa-check text-success me-1"></i>SUID files</li>
+                                    <li><i class="fas fa-check text-success me-1"></i>File permissions</li>
+                                    <li><i class="fas fa-check text-success me-1"></i>Cron jobs</li>
+                                    <li><i class="fas fa-check text-success me-1"></i>Environment vars</li>
+                                    <li><i class="fas fa-check text-success me-1"></i>User groups</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="alert alert-warning">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    <strong>Note:</strong> Real-time scans may take 10-30 seconds to complete. Please be patient.
+                </div>
+
+                <form method="POST" id="realtimeScanForm">
+                    <div class="mb-3">
+                        <label for="scan_type" class="form-label">
+                            <i class="fas fa-list me-1"></i>Select Scan Type
+                        </label>
+                        <select class="form-control" id="scan_type" name="scan_type" required>
+                            <option value="basic">Basic Scan - File Permissions & Processes</option>
+                            <option value="network">Network Scan - Ports & Services</option>
+                            <option value="system">System Scan - System Info & Software</option>
+                            <option value="privilege_escalation">Privilege Escalation - Comprehensive Privesc Scan</option>
+                        </select>
+                    </div>
+                    
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-success btn-lg" id="scanButton">
+                            <i class="fas fa-play me-2"></i>Start Real-Time Scan
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Scan Progress (hidden by default) -->
+        <div class="card mt-4" id="progressCard" style="display: none;">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">
+                    <i class="fas fa-spinner fa-spin me-2"></i>
+                    Real-Time Scan in Progress
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="progress mb-3">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
+                </div>
+                <p class="mb-0">Scanning your system for real vulnerabilities...</p>
+                <small class="text-muted">This may take 10-30 seconds depending on your system.</small>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+document.getElementById('realtimeScanForm').addEventListener('submit', function(e) {
+    // Show progress card
+    document.getElementById('progressCard').style.display = 'block';
+    
+    // Disable the scan button
+    const scanButton = document.getElementById('scanButton');
+    scanButton.disabled = true;
+    scanButton.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Scanning...';
+    
+    // Simulate progress bar
+    let progress = 0;
+    const progressBar = document.querySelector('.progress-bar');
+    const interval = setInterval(() => {
+        progress += Math.random() * 10;
+        if (progress > 85) progress = 85;
+        progressBar.style.width = progress + '%';
+    }, 500);
+    
+    // Clear interval after form submission
+    setTimeout(() => {
+        clearInterval(interval);
+    }, 100);
+});
+</script>
+{% endblock %}
+

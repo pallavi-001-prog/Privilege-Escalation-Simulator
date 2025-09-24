@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}Remediate Network Services{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="fas fa-network-wired me-2"></i>Remediate: Network Services</h5>
+                <a href="{{ url_for('view_results', scan_id=scan_id) }}" class="btn btn-outline-light btn-sm">
+                    <i class="fas fa-arrow-left me-1"></i>Back
+                </a>
+            </div>
+            <div class="card-body">
+                {% if network_check %}
+                <p class="mb-3">The scan detected services running with elevated privileges. Follow these steps to reduce risk:</p>
+                <ol class="mb-4">
+                    <li>Run services under a dedicated, least-privileged user.</li>
+                    <li>Use systemd unit directives: <code>User=</code>, <code>Group=</code>, <code>AmbientCapabilities=</code>.</li>
+                    <li>For containers, drop capabilities and avoid running as root.</li>
+                    <li>Review ports exposure and bind to non-privileged ports when possible.</li>
+                </ol>
+                <div class="alert alert-warning">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    This demo applies a simulated fix and updates the stored results. No real system changes are performed.
+                </div>
+                <form method="POST">
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-wrench me-2"></i>Apply Simulated Fix
+                    </button>
+                    <a href="{{ url_for('view_results', scan_id=scan_id) }}" class="btn btn-outline-secondary ms-2">Cancel</a>
+                </form>
+                {% else %}
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>
+                    No Network Services finding found in this scan.
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+
+
+
+
+
